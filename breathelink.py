@@ -16,6 +16,7 @@ def breathe_choice(argument):
 class BreathelinkDirective(Directive):
 
     required_arguments = 1
+    optional_arguments = 100
     option_spec = {
             'breathe': breathe_choice,
             'doxylink': rst.directives.unchanged_required
@@ -60,7 +61,7 @@ class BreathelinkDirective(Directive):
             link += list_item
             new_content += link
 
-            return new_content
+        return new_content
 
 def setup(app):
 
