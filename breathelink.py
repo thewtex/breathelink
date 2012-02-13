@@ -17,28 +17,56 @@ class BreathelinkDirective(Directive):
 
     required_arguments = 1
     option_spec = {
-            'breathe': breathe_choice
+            'breathe': breathe_choice,
+            'doxylink': rst.directives.unchanged_required
             }
 
 
     def run(self):
+        config = self.state.document.settings.env.app.config
         if self.options.has_key('breathe'):
             breathe_directive_name = self.options['breathe']
         else:
-            breathe_directive_name = 'doxygenclass'
+            breathe_directive_name = config.breathelink_default_breathe_directive
+        if self.options.has_key('doxylink'):
+            doxylink_role_name = self.options['doxylink']
+        else:
+            doxylink_role_name = config.breathelink_default_doxylink_role
 
-        arguments = [self.arguments[0]]
-        options = {'no-link': ''}
-        breathe_directive_class, messages = rst.directives.directive(breathe_directive_name,
-                self.state.memo.language, self.state.document)
-        self.state.parent += messages
-        breathe_directive_instance = breathe_directive_class(breathe_directive_name,
-                arguments, options, self.content, self.lineno,
-                self.content_offset, self.block_text, self.state, self.state_machine)
-        new_content = breathe_directive_instance.run()
+        new_content = []
+        for argument in self.arguments:
+            arguments = [argument]
+            options = {'no-link': ''}
+            breathe_directive_class, messages = rst.directives.directive(breathe_directive_name,
+                    self.state.memo.language, self.state.document)
+            self.state.parent += messages
+            breathe_directive_instance = breathe_directive_class(breathe_directive_name,
+                    arguments, options, self.content, self.lineno,
+                    self.content_offset, self.block_text, self.state, self.state_machine)
+            new_content += breathe_directive_instance.run()
 
-        return new_content
+            list_item = nodes.generated('', '')
+            doxylink_role_class, messages = rst.roles.role(doxylink_role_name,
+                    self.state.memo.language, self.lineno, self.state_machine.reporter)
+            self.state.parent += messages
+            role_nodes, messages = doxylink_role_class(doxylink_role_name, '',
+                    arguments[0], self.lineno, list_item)
+            self.state.parent += messages
+            list_item += role_nodes
+            list_item += nodes.generated('', ' additional documentation.')
+
+            link = nodes.bullet_list('')
+            link['bullet'] = '-'
+            link += list_item
+            new_content += link
+
+            return new_content
 
 def setup(app):
+
+    app.add_config_value('breathelink_default_breathe_directive',
+        'doxygenclass', True)
+    app.add_config_value('breathelink_default_doxylink_role',
+        'doxylink', True)
 
     app.add_directive('breathelink', BreathelinkDirective)
