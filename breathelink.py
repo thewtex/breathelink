@@ -53,8 +53,9 @@ class BreathelinkDirective(Directive):
             role_nodes, messages = doxylink_role_class(doxylink_role_name, '',
                     arguments[0], self.lineno, list_item)
             self.state.parent += messages
+            list_item += nodes.generated('', 'See ')
             list_item += role_nodes
-            list_item += nodes.generated('', ' additional documentation.')
+            list_item += nodes.generated('', ' for additional documentation.')
 
             link = nodes.bullet_list('')
             link['bullet'] = '-'
