@@ -8,4 +8,4 @@ documentation and create a link to the full class documentation.  The new
 directive `breathelink` also creates an index entry.
 
 .. _breathe: https://github.com/michaeljones/breathe
-.. _doxylinx: https://bitbucket.org/birkenfeld/sphinx-contrib/
+.. _doxylink: https://bitbucket.org/birkenfeld/sphinx-contrib/
