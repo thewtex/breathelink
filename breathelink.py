@@ -47,11 +47,14 @@ class BreathelinkDirective(Directive):
             new_content += breathe_directive_instance.run()
 
             list_item = nodes.generated('', '')
+            list_item.reporter = self.state_machine.reporter
             doxylink_role_class, messages = rst.roles.role(doxylink_role_name,
                     self.state.memo.language, self.lineno, self.state_machine.reporter)
             self.state.parent += messages
             role_nodes, messages = doxylink_role_class(doxylink_role_name, '',
                     arguments[0], self.lineno, list_item)
+            # The reporter function is not picklable
+            list_item.reporter = None
             self.state.parent += messages
             list_item += nodes.generated('', 'See ')
             list_item += role_nodes
