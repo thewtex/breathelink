@@ -7,7 +7,7 @@ from docutils.parsers.rst import Directive
 
 def breathe_choice(argument):
     """Option defining which breathe directive to use."""
-    breathe_directives = [directive for directives in
+    breathe_directives = [directive for directive in
             breathe.DoxygenDirectiveFactory.directives.iterkeys()]
 
     return rst.directives.choice(argument, breathe_directives)
