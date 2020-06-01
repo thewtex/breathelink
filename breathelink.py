@@ -25,11 +25,11 @@ class BreathelinkDirective(Directive):
 
     def run(self):
         config = self.state.document.settings.env.app.config
-        if self.options.has_key('breathe'):
+        if 'breathe' in self.options:
             breathe_directive_name = self.options['breathe']
         else:
             breathe_directive_name = config.breathelink_default_breathe_directive
-        if self.options.has_key('doxylink'):
+        if 'doxylink' in self.options:
             doxylink_role_name = self.options['doxylink']
         else:
             doxylink_role_name = config.breathelink_default_doxylink_role
@@ -75,3 +75,9 @@ def setup(app):
         'doxylink', True)
 
     app.add_directive('breathelink', BreathelinkDirective)
+
+    return {
+        'version': '0.1',
+        'parallel_read_safe': True,
+        'parallel_write_safe': True,
+    }
