@@ -28,7 +28,10 @@ class BreathelinkDirective(Directive):
         if 'breathe' in self.options:
             breathe_directive_name = self.options['breathe']
         else:
-            breathe_directive_name = config.breathelink_default_breathe_directive
+            if 'breathelinkstruct' in self.name:
+                breathe_directive_name = config.breathelink_struct_breathe_directive
+            else:
+                breathe_directive_name = config.breathelink_default_breathe_directive
         if 'doxylink' in self.options:
             doxylink_role_name = self.options['doxylink']
         else:
@@ -73,11 +76,14 @@ def setup(app):
         'doxygenclass', True)
     app.add_config_value('breathelink_default_doxylink_role',
         'doxylink', True)
+    app.add_config_value('breathelink_struct_breathe_directive',
+        'doxygenstruct', True)
 
     app.add_directive('breathelink', BreathelinkDirective)
+    app.add_directive('breathelinkstruct', BreathelinkDirective)
 
     return {
-        'version': '0.1',
+        'version': '0.2',
         'parallel_read_safe': True,
         'parallel_write_safe': True,
     }
