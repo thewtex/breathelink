@@ -55,7 +55,7 @@ class BreathelinkDirective(Directive):
                     self.state.memo.language, self.lineno, self.state_machine.reporter)
             self.state.parent += messages
             role_nodes, messages = doxylink_role_class(doxylink_role_name, '',
-                    arguments[0], self.lineno, list_item)
+                    arguments[0], self.lineno, self.state.inliner)
             # The reporter function is not picklable
             list_item.reporter = None
             self.state.parent += messages
